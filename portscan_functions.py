@@ -25,7 +25,7 @@ def scan_ports(host_ip, delay):
 
     threads = []        # To run TCP_connect concurrently
     output = {}         # For printing purposes
-
+    open_ports_numbers = []
     # Spawning threads to scan ports
     for i in range(MAX_PORT_RANGE):
         t = threading.Thread(target=TCP_connect, args=(host_ip, i, delay, output))
@@ -39,4 +39,30 @@ def scan_ports(host_ip, delay):
     # Printing listening ports from small to large
     for i in range(MAX_PORT_RANGE):
         if output[i] ==  'Listening':
-            print(Fore.GREEN  + str(i) + ': ' + output[i])
+            #print(Fore.GREEN  + str(i) + ': ' + output[i])
+            open_ports_numbers.append(str(i))
+
+    return open_ports_numbers
+
+def compare_ports(target_ip):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    my_local_ip = s.getsockname()[0]
+    s.close()
+
+
+    print("Scanning your computer...")
+    open1 = scan_ports(str(my_local_ip),1)
+    open11= set(open1)
+    print("Scanning target computer...")
+    open2 =scan_ports(str(target_ip),1)
+    open22 = set(open2)
+
+    common_ports = open11.intersection(open22)
+    common_portsz = list(common_ports)
+    return common_portsz
+
+
+
+
+    #return compared_list
