@@ -7,9 +7,9 @@ import  threading
 
 from    hostscan_functions  import *
 from    portscan_functions  import *
-from    speed_test          import *
 from    colorama            import init, Fore, Back, Style
 from    network_interfaces  import *
+
 n_in_oneThread = 2
 MAX_PORT_RANGE = 65536
 
@@ -26,19 +26,15 @@ def mainMenu():
     
     print(Fore.CYAN+"[1] Scan ports")
     print(Fore.CYAN+"[2] Scan hosts")
-    print(Fore.CYAN+"[3] Bandwidth test between server and client")
-    print(Fore.CYAN+"[4] Show all network interfaces")
+    print(Fore.CYAN+"[3] Show all network interfaces")
 
     choose=input(">>: ")
 
     if choose=="1":
         portMenu()
-
     elif choose=="2":
-        hostMenu()
+        hostMenu()         
     elif choose=="3":
-        speedMenu()            
-    elif choose=="4":
         interfaceMenu()
     else:
         print("[*] Wroong choose.")
@@ -49,7 +45,22 @@ def hostMenu():
     [2] Print ports and hostnames
     """)
     choose=input(">>: ")
-    threads=defrag_ip_for_thread(10,18,n_in_oneThread)
+    print("Enter the 3 digit of IP (with end comma, 192.168.168.) that will be scanned: \n")
+    ip_3digit = input()
+    print("Enter IP range XXX:( 192.168.168.XXX) [XXX format --> 1:100] : \n")
+    range_4th = input()
+    args=range_4th.split(":")
+    print(args)
+    try:
+        _initial_ = int(args[0])
+        _ended_   = int(args[1])
+    except:
+        print("Invalid type format. Type like that : '5-78' ")
+        print(_initial_)
+        print(_ended_)
+
+
+    threads=defrag_ip_for_thread(_initial_, _ended_, n_in_oneThread)
 
     if choose=="1":
         printIPs(threads,n_in_oneThread)
@@ -106,6 +117,7 @@ def speedMenu():
 def interfaceMenu():
     show_network_interfaces()
     backMenu()
+    
 if __name__=="__main__":
     init()                  # FOR COLORAMA ON WINDOWS PLATFORMS
     init(autoreset=True)    # AUTORESET COLORING

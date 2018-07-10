@@ -1,5 +1,7 @@
 import 	wmi
+import socket
 import  colorama
+
 from    colorama            import init, Fore, Back, Style
 
 def show_network_interfaces():
@@ -14,8 +16,6 @@ def show_network_interfaces():
 		i+=1
 	return lst
 	
-
-
 def choose_network_interfaces():
 	""" return SELECTED NETWORK INTERFACE NAME"""
 	lst=show_network_interfaces()
@@ -26,3 +26,10 @@ def choose_network_interfaces():
 	for i in range(1,adapter_number+1):
 		if choose == str(i):
 			return lst[i-1]
+
+def get_local_ip():
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.connect(("8.8.8.8", 80))
+	localIP=(sock.getsockname()[0])
+	sock.close()
+	return localIP

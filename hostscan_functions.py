@@ -70,7 +70,7 @@ def hostip_scanner(start,end,IP_3_digit):
     PORT_STATUS =[]
     HOST_NAMES = []
     
-    for i in range(start,end):
+    for i in range(start,end+1):
 
         PORT_STATUS.append(get_host_status(NET+str(i),1000))
         #print("\t",end="")
@@ -117,11 +117,14 @@ def printIPsWithHosts(threads,n_in_oneThread):
     for th in threads:
         th.join()
 
-    for th in threads[0:len(threads)-1]:
+    for th in threads[0:(len(threads))]:
         #print(th.getName())
         liste =th.get_ports()
         liste2 = th.get_hosts()
         for i in range(n_in_oneThread):
-            print(liste[i],end="\t")
-            print(liste2[i])
+            try:
+                print(liste[i],end="\t")
+                print(liste2[i])
+            except:
+                pass
         #print("\n")
